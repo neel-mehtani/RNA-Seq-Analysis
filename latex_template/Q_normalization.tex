@@ -1,0 +1,72 @@
+{\bf [25 points] Normalization}\\
+
+In this question, we will implement three different normalization techniques on real RNA-seq data.
+
+\textbf{Data Description}
+
+
+We provide data from a study in which a human cell line (A549) was treated with a specific drug (dexamethasone). Samples were collected following treatment to create a time course. For this question you would use 24 samples for which raw RNA-seq data is provided (file: ReadCounts.txt). The table is of size $n\times m$ where $n$ is the total number of genes and $m$ is the total number of samples. We have $\sim 9K$ genes in the matrix. 
+
+You have also been provided with the lengths of each gene present in the data matrix (file: GeneLengths.txt).
+
+\vspace{20pt}
+
+\textbf{Your task}
+
+\begin{enumerate}
+
+
+\item (15 points) Normalize the data using three normalization techniques, i) RPKM, ii) TPM, and iii) size factor normalization. 
+
+Both RPKM and TPM normalize by the total number of reads and the length of each transcript. This normalization technique, however, is not always effective since few, very highly expressed genes can dominate the total count and skew the expression analysis.
+
+Another normalization technique consists of computing the effective library size by considering a size factor for each sample. By dividing each sample's counts by the corresponding size factors, we bring all the count values to a common scale, making them comparable. Intuitively, if sample A is sequenced N times deeper than sample B, the read counts of non-differentially expressed genes are expected to be, on average, N times higher in sample A than in sample B, even if there is no difference in expression.
+
+If we expect that most genes are not different between the samples, we can use the median ratio to estimate these factors. Thus, to estimate the size factors for each sample, we take the median of the ratios of observed counts $k_{ij}$ to their geometric mean.
+
+$$s_j=\underset{i}{\mathrm{median}} \frac{k_{ij}}{(\prod_{v=1}^{m}k_{iv})^{\frac{1}{m}}}$$
+
+
+After computing the size factors, we can normalize the read counts by dividing each sample by their corresponding size factors.
+
+$$\hat{k_{ij}}=\frac{k_{ij}}{s_j}$$ 
+
+
+You have been provided with a skeleton python script $normalization.py$. 
+Complete the functions $rpkm$, $tpm$, $size\_factor$  in the $normalization.py$ script.
+
+\vspace{20pt}
+ 
+\fbox{\parbox{0.8\textwidth}{
+\textbf{Note: }{Your code is graded by an autograder. The script should be able to run with command line:\\
+
+\texttt{python normalization.py ReadCounts.txt GeneLengths.txt}\\
+
+All the normalization functions should return a $n\times m$  array.}
+}
+}
+\vspace{20pt}
+
+\item (6 points) Submit the boxplots of the log2 converted count data for each sample for the i) raw counts, ii) RPKM normalized counts, iii) TPM normalized counts, and iv) size factor normalized counts. 
+
+Note: Your plots will not be graded by the autograder. Include the plots in the pdf file. 
+
+Note2: Save your output from iv) as a new file, $size\_factor\_normalized\_counts.txt$
+
+
+%%%%%%%%%%%%%%%%%%
+\begin{solution}
+\end{solution}
+%%%%%%%%%%%%%%%%%%
+
+
+\item (4 points) Comparing the 4 boxplots, which normalization technique would you choose for this dataset? Explain.
+
+%%%%%%%%%%%%%%%%%%
+\begin{solution}
+\end{solution}
+%%%%%%%%%%%%%%%%%%
+
+
+
+\end{enumerate}

@@ -1,0 +1,58 @@
+{\bf [18 points] Learning from scRNA-seq data}\\
+While cells from the same individual share (roughly) the same DNA
+sequence, different cells use different subsets of these genes,
+and at different levels. Single-cell RNA sequencing (scRNA-seq) measures the
+activity levels of a set of annotated genes in a single cell, a vector with continues
+values that is termed ``gene expression profile". The type of a cell (e.g., lung cell,
+brain cell, skin epidermis) is closely connected with its gene expression profile.
+
+In this problem you will use a combination of unsupervised and supervised learning techniques to explore and classify cells from a large single-cell RNA sequencing (scRNA-seq) dataset. This is an important goal. For example, when taking a cancer biopsy the sample contains several different
+types of cells and the ability to accurately determine the cell composition can
+have important impact on the type of treatment prescribed. 
+
+\textbf{Data Description}
+We will implement several learning algorithms in Python and test them on an RNA-seq dataset. All the required data are in a Box folder \href{https://cmu.box.com/s/93hufa5pk5envnrlvesso2ks0q0btchy}{here}. The two files \texttt{train\_gene\_expression.npz} and \texttt{test\_gene\_expression.npz} are sparse SciPy/Numpy-formatted gene expression matrices. Each row of the matrix is a cell, with its expression value for each gene in a separate column; there are a total of $20499$ genes (columns) in each matrix. In addition, the two files \texttt{train\_labels.npy} and \texttt{test\_labels.npy} contain cell types labels for each row in the training and testing datasets, respectively; there are a total of five cell types present in both the train and test data.
+
+\textbf{Before starting:} make sure you have Numpy, Matplotlib, Pandas, Seaborn, SciPy and SciKit Learn installed on your machine. If you have trouble installing these packages, please come to office hours for help. In addition, please download the dataset from the above Box link. To do this, just open the link and click the Download button in the Box UI. Note that the data is somewhat large ($\sim 400$ MB), so make sure to do this well before the homework due date.
+
+\textbf{Your task:}
+
+\fbox{\parbox{0.9\textwidth}{
+\textbf{Note: }{Your code is graded by an autograder. You have been given a skeleton code spectral\_clustering.py. You have to complete 4 functions (\texttt{get\_top\_gene\_filter}, \texttt{reduce\_dimensionality\_pca}, \texttt{plot\_transformed\_cells}, and \texttt{train\_and\_evaluate\_svm\_classifier}) as well as part of the \texttt{\_\_main\_\_} method of the script. The details about the functions are given later.  At the end, the script should be able to run with command line:\\
+
+\texttt{python classification.py path\_to\_dataset/train\_gene\_expression.npz \textbackslash \\ path\_to\_dataset/test\_gene\_expression.npz path\_to\_dataset/train\_labels.npy \textbackslash\\
+dataset/test\_labels.npy "svm\_pipeline"\\
+}
+
+The formats of arguments and return values of each function are explicitly described in the skeleton code. For the hyperparameters, please use the 
+\textbf{default} values specified in the skeleton code. 
+}
+}
+}
+
+\begin{enumerate}
+\item (4 points) Not all genes are useful for cell type classification. To save time and improve accuracy we can cluster using only a subset of the genes. One common criteria to select genes is dispersion, which is defined as the variance divided by mean. \textbf{Complete} the $\texttt{get\_top\_gene\_filter}$ function to compute a mask that selects only the columns of the expression matrix that are the top 2000 most dispersed across all cells in the training dataset.
+
+\item (2 points) 
+As another preprocessing step, we will use Principle Component Analysis (PCA) to reduce the dimensionality of the filtered genes. PCA is an unsupervised learning technique that computes linear combinations of features that best capture the axes of variance in the high-dimensional feature space. \textbf{Complete} the function \texttt{reduce\_dimensionality\_pca}, which performs PCA on the filtered expression data and returns the transformed training data and test data. Please use the SciKit Learn implementation of PCA (see documentation \href{https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html}{here}).
+\\\\
+(\textbf{Hint:} for best results, concatenate the filtered training and expression data together and input the combined data for training the PCA model.)
+
+\item (4 points) 
+To visualize the appropriateness of PCA embedding for the cell classification task, we can plot our cells in the 2D plane spanned by the top 2 principal components. \textbf{Complete} the \texttt{plot\_transformed\_cells} function, which takes as input the transformed gene expression data and plots the cells using only the first two principal components represented in the transformed data. Your plot should color the cells by their cell type label. Apply the completed function to the PCA-transformed \textit{training} gene expression data, and \textbf{attach an image} of your plot below. \textbf{Comment} on how clear the difference between cell types is in your plot.
+\\\\
+(\textbf{Hint:} consider using Pandas + Seaborn for plotting and labeling.)
+
+%%%%%%%%%%%%%%%%%%
+\begin{solution}
+
+\end{solution}
+%%%%%%%%%%%%%%%%%%
+
+\item (2 points) Next, we will implement a pipeline that uses a Support Vector Machine (SVM) with a soft margin to classify our cells. SVM is a supervised learning algorithm that finds a margin (that is, a ``hyperplane" that divides our feature space into multiple regions) to maximize the distinction between different classes (in our case, cell types). In addition, using the ``kernel trick," SVM is able to find non-linear decision boundaries when the data is not linearly separable (see \href{https://en.wikipedia.org/wiki/Kernel_method}{the Wikipedia page} for more details if you are curious). \textbf{Complete} the \texttt{train\_and\_evaluate\_svm\_classifier} function, which trains a simple SVM pipeline on the PCA-reduced gene expressiond and returns the trained model as well as the classification accuracy on the test data. Note that this function has already been partially implemented for you. Please use the SciKit Learn implementation of the SVM classifier (see documentation \href{https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html}{here} and \href{https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html}{here}).
+
+\item (4 points) Now we will combine the above functions to generate a robust pipeline for cell-type classification. \textbf{Complete} the (\texttt{mode ==\textbf{"svm\_pipeline"}}) branch within the \texttt{\_\_main\_\_} method of the Python script, which combines the gene filtration, PCA dimensionality reduction and SVM classification steps and prints the final score of your classifier. Filtering for the top $2000$ genes using the training dataset, using PCA with $20$ principal components and using the default SVM hyperparameters, \textbf{report} the training and test accuracy of your classifier below.
+
+\begin{solution}
+\end{solution}
+\end{enumerate}

@@ -1,0 +1,101 @@
+{\bf [22 points] Differentially expressed genes}\\
+
+In this exercise we will complete steps to identify differentially expressed genes from the size factor normalized read count data you saved as 'size\_factor\_normalized\_counts.txt', from Q1. We will also learn how to perform multiple hypothesis testing to identify significant differentially expressed genes.
+
+You have been supplied with the numerical sample labels in \textit{labels.txt}. There are two types of samples, 1) cell treated with dexamethasone(case) and 2) cell treated with ethanol (control). The gene names have been provided in \textit{GeneNames.txt} file.
+
+\vspace{20pt}
+
+\fbox{\parbox{0.8\textwidth}{
+\textbf{Note: }{Your code for this problem is graded by an autograder. The script should be able to run with command line:\\
+
+\texttt{python de\_genes.py }\\
+
+Include requested plots in the pdf file.}
+}
+}
+
+\vspace{20pt}
+
+\textbf{Your task}
+
+\vspace{20pt}
+
+\begin{enumerate}
+
+\item (3 points) Dispersion of gene $i$ in condition $C$, $C\in \{Case, Control\}$ can be computed as 
+ 
+$$disp_i^{C}=\frac{std(\hat{k_{i,C}})}{mean(\hat{k_{i,C})}}$$ 
+
+Submit a log2-log2 scatterplot of dispersion vs mean in the size factor counts dataset, for the two conditions (but with all the data on one plot). Use different colors for case and control condition. How would you interpret this plot, and why?
+
+%%%%%%%%%%%%%%%%%%
+\begin{solution}
+\end{solution}
+%%%%%%%%%%%%%%%%%%
+
+\item (3 points) Compute the log2 fold change of the genes in the two conditions. Submit a scatterplot of log2 foldchange vs log2 mean count in the two conditions. List the top 10 up and down regulated genes according to the fold change. Are these the most useful genes to investigate? Why or why not?
+
+%%%%%%%%%%%%%%%%%%
+\begin{solution}
+\end{solution}
+%%%%%%%%%%%%%%%%%%
+
+\item (6 points) Determining whether the gene expressions in two conditions are statistically different consists of rejecting the null hypothesis that the two data samples come from distributions with equal means. To do this, we can calculate a p-value for each gene.
+
+However. thresholding P-values to determine what fold changes are more significant than others is not appropriate for this type of data analysis, due to the multiple hypothesis testing problem. When performing a large number of simultaneous tests, the probability of getting a significant result simply due to chance increases with the number of tests. In order to account for multiple testing, perform a correction (or adjustment) of the P-values so that the probability of observing at least one significant result due to chance remains below the desired significance level. 
+We can use The Benjamini-Hochberg (BH) adjustment.
+
+The BH is defined as:
+
+Let $p_1\leq ... \leq p_n$ be ordered p-values. Define
+$$k = i : p_i \leq \frac{i}{n}\alpha$$
+and reject $H_0^1...H_0^k$. $\alpha$ is the false discovery rate(FDR) to be controlled. If no such $i$ exists, then no hypothesis will be rejected. 
+
+\textbf{Implement the BH correction function in }\texttt{de\_genes.py}. The implementation must be your own.\\
+
+\item (10 points) 
+
+In addition to Benjamini-Hochberg (BH) correction, we will discuss two other ways to correct for multiple hypotheses: i) permutation tests and ii) Bonferroni correction.
+
+In permutation tests we run multiple tests by randomizing the labels of the experiments.  We use the total number of permutation tests instead of the total number of genes for p-value correction.
+
+Consider a situation in which we have conducted $50,000$ such permutation tests and we have $20,000$ genes. In the table below, we present the results of the permutation tests:
+
+\begin{tabular}{|c|c|c|c|}
+\hline
+p-value& 0.05&0.01&0.001\\
+\hline
+No. of times we found a gene with a lower p-value& 4000 & 2500 & 600\\
+\hline
+\end{tabular}
+
+\begin{enumerate}
+\item What is the uncorrected p-value required for a corrected p-value of 0.05 according to the randomization correction method?
+
+\item Assume we have identified 4000 genes with a p-value < 0.1. What is the false discovery rate (FDR)? \textbf{Reminder}: by definition, in a multiple hypothesis test framework, FDR = $\mathbb{E}$[V/R], where V is the number of null hypotheses that are false rejected and R is the total number of rejected null hypotheses.
+\end{enumerate}
+\begin{solution}
+\end{solution}
+
+The motivation of Bonferroni correction is,
+
+$$p(specific\: T_i\: passes\: H_0)<\frac{\alpha}{n}$$
+
+$$p(some\: T_i\: passes\: H_0)<\alpha$$
+
+where $\alpha$ is the p-value cut-off and $n$ is the total number of p-values to be corrected.
+
+\begin{enumerate}[resume]
+\item What is the uncorrected p-value required for a corrected p-value of 0.05 according to the Bonferroni correction?
+
+\item Suppose we identified 40 genes as significant using the p-value adjusted by Bonferroni correction that you found in part iii). What is the FDR?
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%
+\begin{solution}
+\end{solution}
+%%%%%%%%%%%%%%%%%%
+\end{enumerate}
+
+
